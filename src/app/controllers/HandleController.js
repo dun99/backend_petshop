@@ -1,0 +1,120 @@
+const APIFeatures = require('../../utils/apiFeature');
+const catchAsync = require('../../utils/catchAsynError');
+const { convertToArray } = require('../../utils/helpers');
+const AppError = require('../../utils/AppError');
+
+exports.getAll = (Model, popOptions) =>
+  catchAsync(async (req, res, next) => {
+    let filter = {};
+
+    const features = new APIFeatures(
+      Model.find(filter).populate(popOptions),
+      req.query
+    )
+      .filter()
+      .sort()
+      .limitFields()
+      .search()
+      .paginate();
+    const doc = await features.query;
+
+    const docArr = convertToArray(doc);
+    const totalCount = (await Model.find()).length;
+    res.header('Access-Control-Expose-Headers', 'x-total-count');
+    res.setHeader('x-total-count', totalCount);
+    res.status(200).json(docArr);
+  });
+
+exports.getAllDeep = (Model, popOptions, popOptions2) =>
+  catchAsync(async (req, res, next) => {
+    let filter = {};
+
+    const features = new APIFeatures(
+      Model.find(filter).populate({
+        path: popOptions,
+        populate: {
+          path: popOptions2,
+        },
+      }),
+      req.query
+    )
+      .filter()
+      .sort()
+      .limitFields()
+      .paginate();
+    const doc = await features.query;
+
+    const docArr = convertToArray(doc);
+
+    res.status(200).json(docArr);
+  });
+
+exports.getAllDeepThreeLayers = (Model, popOptions, popOptions2, popOptions3) =>
+  catchAsync(async (req, res, next) => {
+    let filter = {};
+
+    const features = new APIFeatures(
+      Model.find(filter).populate({
+        path: popOptions,
+        populate: {
+          path: popOptions2,
+          populate: {
+            path: popOptions3,
+          },
+        },
+      }),
+      req.query
+    )
+      .filter()
+      .sort()
+      .limitFields()
+      .paginate();
+    const doc = await features.query;
+
+    const docArr = convertToArray(doc);
+
+    res.status(200).json(docArr);
+  });
+
+exports.getOne = (Model, popOptions) =>
+  catchAsync(async (req, res, next) => {
+    let query = await Model.findById(req.params.id);
+    if (popOptions) query = query.populate(popOptions);
+    const doc = await query;
+    if (!doc) {
+      return next(new AppError('Document not found', 404));
+    }
+    res.status(200).json(doc);
+  });
+
+exports.createOne = (Model) =>
+  catchAsync(async (req, res, next) => {
+    const doc = await Model.create(req.body);
+
+    res.status(201).json(doc);
+  });
+
+exports.deleteOne = (Model) =>
+  catchAsync(async (req, res, next) => {
+    const doc = await Model.findByIdAndDelete(req.params.id);
+
+    if (!doc) {
+      return next(new AppError('Document not found'), 404);
+    }
+
+    res.status(204).json(null);
+  });
+
+exports.updateOne = (Model) =>
+  catchAsync(async (req, res, next) => {
+    const doc = await Model.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!doc) {
+      return next(new AppError('Document not found', 404));
+    }
+
+    res.status(200).json(doc);
+  });
