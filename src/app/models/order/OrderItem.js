@@ -3,7 +3,7 @@ const joi = require('joi');
 const Schema = mongoose.Schema;
 const joigoose = require('joigoose')(mongoose);
 
-const joiCartItem = joi.object({
+const joiOrderItem = joi.object({
   item: joi
     .string()
     .meta({
@@ -15,8 +15,17 @@ const joiCartItem = joi.object({
     .required(),
   quantity: joi.number(),
   price: joi.number(),
+  orders: joi
+    .string()
+    .meta({
+      _mongoose: {
+        type: 'ObjectId',
+        ref: 'Orders',
+      },
+    })
+    .required(),
 });
 
-const CartItem = new Schema(joigoose.convert(joiCartItem));
+const OrderItem = new Schema(joigoose.convert(joiOrderItem));
 
-module.exports = mongoose.model('CartItem', CartItem);
+module.exports = mongoose.model('OrderItem', OrderItem);

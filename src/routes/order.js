@@ -3,10 +3,9 @@ const router = express.Router();
 
 const OrderController = require('../app/controllers/OrderController');
 
-router.route('/').get(OrderController.getAllOrders);
-//   .get(CartController.getAllCarts);
-
-// router.route('/:id').get(OrderController.get);
-//   .delete(CartController.deleteCart);
+router
+  .route('/')
+  .post(OrderController.createOrder)
+  .get(OrderController.getAllOrders);
 
 module.exports = router;
