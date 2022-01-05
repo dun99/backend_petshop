@@ -8,4 +8,10 @@ router
   .post(OrderController.createOrder)
   .get(OrderController.getAllOrders);
 
+router
+  .route('/:id')
+  .get(OrderController.getOneOrder)
+  .put(OrderController.updateOrder);
+
+router.route('/history/:userId').get(OrderController.getAllOrderUser);
 module.exports = router;

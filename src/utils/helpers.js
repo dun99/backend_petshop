@@ -18,8 +18,16 @@ const multerFilter = (req, file, cb) => {
 
   cb(null, true);
 };
+
+const getOrderAsync = async function asyncForEach(array, callback) {
+  for (let index = 0; index < array.length; index++) {
+    await callback(array[index], index);
+  }
+};
+
 module.exports = {
   convertToArray,
   filterObj,
   multerFilter,
+  getOrderAsync,
 };

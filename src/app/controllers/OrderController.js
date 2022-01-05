@@ -1,5 +1,9 @@
-const Orders = require('../models/order/Order');
+const Order = require('../models/order/Order');
+const OrderItem = require('../models/order/OrderItem');
 const factory = require('./HandleController');
-exports.getAllOrders = factory.getAll(Orders, 'user');
-exports.createOrder = factory.createOne(Orders);
-// exports.delete = factory.deleteOne(Cart);
+
+exports.getAllOrders = factory.getAllOrder(Order, OrderItem, 'user');
+exports.getAllOrderUser = factory.getAllOrderUser(Order, OrderItem, 'user');
+exports.createOrder = factory.createOrder(Order, OrderItem);
+exports.updateOrder = factory.updateOne(Order);
+exports.getOneOrder = factory.getOne(Order);
