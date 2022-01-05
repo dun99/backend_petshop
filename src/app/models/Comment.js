@@ -8,7 +8,7 @@ const joiCommentScheme = joi.object({
     _mongoose: { type: 'ObjectId', ref: 'Product' },
   }),
   user: joi.string().meta({
-    _mongoose: { type: 'ObjectId', ref: 'User' },
+    _mongoose: { type: 'string', ref: 'User' },
   }),
   createAt: joi.date(),
   content: joi.string(),

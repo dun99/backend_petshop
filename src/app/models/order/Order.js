@@ -5,10 +5,17 @@ const joigoose = require('joigoose')(mongoose);
 const User = require('../User');
 
 const joiOrder = joi.object({
-  info: joi.object(),
+  info: joi.object().keys({
+    phone: joi.string(),
+    city: joi.string(),
+    district: joi.string(),
+    lastName: joi.string(),
+    firstName: joi.string(),
+    desc: joi.string(),
+  }),
   user: joi.string().meta({
     _mongoose: {
-      type: 'ObjectId',
+      type: 'string',
       ref: User,
     },
   }),

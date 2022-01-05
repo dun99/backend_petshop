@@ -14,4 +14,5 @@ router
   .put(commentController.updateComment)
   .delete(commentController.deleteComment);
 
+router.route('/product/:productId').get(commentController.getComments);
 module.exports = router;

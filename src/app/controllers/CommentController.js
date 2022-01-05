@@ -5,3 +5,4 @@ exports.getOneComment = factory.getOne(Comment);
 exports.createComment = factory.createOne(Comment);
 exports.deleteComment = factory.deleteOne(Comment);
 exports.updateComment = factory.updateOne(Comment);
+exports.getComments = factory.getComment(Comment, 'user');
