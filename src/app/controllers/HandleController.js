@@ -201,7 +201,7 @@ exports.deleteOne = (Model) =>
     res.status(204).json(null);
   });
 
-exports.updateOne = (Model) =>
+exports.updateOne = (Model, popOptions) =>
   catchAsync(async (req, res, next) => {
     const doc = await Model.findByIdAndUpdate(req.params.id, req.body, {
       new: true,

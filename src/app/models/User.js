@@ -3,13 +3,11 @@ const joi = require('joi');
 const Schema = mongoose.Schema;
 const joigoose = require('joigoose')(mongoose);
 
-joi.objectId = require('joi-objectid')(joi);
-
 const joiUserScheme = joi.object({
   _id: joi.string(),
   name: joi.string(),
   avatar: joi.string(),
-  email: joi.string().email().required(),
+  email: joi.string().email(),
   phone: joi.string(),
   createAt: joi.date(),
   role: joi.string().allow('user', 'admin').default('user'),
