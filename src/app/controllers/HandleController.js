@@ -190,9 +190,17 @@ exports.createOne = (Model) =>
     res.status(201).json(doc);
   });
 
-exports.deleteOne = (Model) =>
+exports.deleteOne = (Model, OrderItemModel) =>
   catchAsync(async (req, res, next) => {
     const doc = await Model.findByIdAndDelete(req.params.id);
+    if (OrderItemModel) {
+      const itemOrders = await OrderItemModel.find({
+        item: req.params.id,
+      });
+      itemOrders.forEach(async (item) =>
+        OrderItemModel.findByIdAndDelete(item._id)
+      );
+    }
 
     if (!doc) {
       return next(new AppError('Document not found'), 404);
