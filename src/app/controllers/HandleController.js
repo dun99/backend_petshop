@@ -66,7 +66,10 @@ exports.getAllOrderUser = (ModelOrder, ModelOrderItem, popOptions) =>
     let filter = {};
 
     const features = new APIFeatures(
-      ModelOrder.find(filter).populate(popOptions),
+      ModelOrder.find({
+        ...filter,
+        user: req.params.userId,
+      }).populate(popOptions),
       req.query
     )
       .filter()
@@ -74,12 +77,13 @@ exports.getAllOrderUser = (ModelOrder, ModelOrderItem, popOptions) =>
       .limitFields()
       .search()
       .paginate();
-    const orders = await features.query;
+
+    const ordersDoc = await features.query;
 
     const data = [];
-    await getOrderAsync(orders, async (order) => {
+    await getOrderAsync(ordersDoc, async (order) => {
       const orderItem = await ModelOrderItem.find({
-        user: req.params.userId,
+        // user: req.params.userId,
         orders: order._id,
       }).populate('item');
       const orderDetails = {
