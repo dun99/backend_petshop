@@ -197,8 +197,8 @@ exports.deleteOne = (Model, OrderItemModel) =>
       const itemOrders = await OrderItemModel.find({
         item: req.params.id,
       });
-      itemOrders.forEach(async (item) =>
-        OrderItemModel.findByIdAndDelete(item._id)
+      itemOrders.forEach(
+        async (item) => await OrderItemModel.findByIdAndDelete(item._id)
       );
     }
 
